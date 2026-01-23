@@ -1,0 +1,248 @@
+body {
+  margin: 0;
+  background: #000;
+  color: #fff;
+  font-family: "Silkscreen", system-ui, sans-serif;
+}
+
+main {
+  padding-left: 15%;
+}
+
+@media (max-width: 800px) {
+  main {
+    padding-left: 5px;
+  }
+}
+
+section {
+  margin-top: 24px;
+}
+
+.settings-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+#settingsSection {
+  margin-top: 0;
+  margin-bottom: 72px;
+}
+
+#monitorSection {
+  margin-top: 24px;
+  margin-bottom: 40px;
+
+}
+
+.logo {
+  max-width: 320px;
+  height: auto;
+  display: block;
+}
+
+select,
+button {
+  font: inherit;
+  color: #fff;
+  background: #000;
+  padding: 0;
+}
+
+input[type="text"] {
+  font: inherit;
+  color: #fff;
+  background: #000;
+  border: 2px solid #fff;
+}
+
+input[type="text"]::placeholder {
+  color: #a8a8a8;
+}
+
+.preset-name {
+  width: 12ch;
+}
+
+button:active {
+  background: #fff;
+  color: #000;
+}
+
+button:disabled {
+  opacity: 1;
+  color: #a8a8a8;
+  background: #000;
+}
+
+input[type="range"] {
+  width: 320px;
+  height: 18px;
+  appearance: none;
+  background: #000;
+  border: 2px solid #fff;
+  padding: 0;
+}
+
+.slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 14px;
+}
+
+.slider-meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 18px;
+  background: #111;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 18px;
+  background: #fff;
+  border: 2px solid #fff;
+  margin-top: 0;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 18px;
+  background: #111;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 18px;
+  background: #fff;
+  border: 1px solid #333;
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  appearance: none;
+  background: #000;
+  border: 2px solid #fff;
+  display: inline-block;
+  position: relative;
+  margin-left: 0;
+}
+
+.checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: #fff;
+}
+
+.monitor-log {
+  font-family: "Sixtyfour", "Silkscreen", system-ui, sans-serif;
+  line-height: 2;
+  height: 8em;
+}
+
+.monitor-log .status-line {
+  display: inline-block;
+  padding: 2px 6px;
+  background: #fff;
+  color: #000;
+}
+
+.device-row {
+  display: flex;
+  gap: 18px;
+}
+
+.device-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.device-row-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.preset-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.select-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+select {
+  border: 2px solid #fff;
+}
+
+.wavetable-preview {
+  width: 320px;
+  height: 120px;
+  border: 2px solid #fff;
+  background: #000;
+  display: block;
+}
+
+.wavetable-filename {
+  max-width: 340px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wavetable-section .preset-row+.preset-row {
+  margin-top: 8px;
+}
+
+.cc-grid-wrap {
+  display: block;
+  margin-top: 40px;
+  /* width: 340px; */
+}
+
+.cc-grid-title {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.cc-grid {
+  display: grid;
+  /* width: 340px; */
+  /* grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(5, 1fr); */
+}
+
+.cc-field {
+  width: 3ch;
+  text-align: center;
+  font: inherit;
+  color: #fff;
+  background: #000;
+  border: 2px solid #fff;
+  justify-self: center;
+}
+
+.cc-field:focus {
+  outline: none;
+  background: #111;
+}
