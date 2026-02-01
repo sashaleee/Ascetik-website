@@ -18,6 +18,7 @@
   const SYSEX_PARAM_SAVE_SETTINGS = 0x11;
   const SYSEX_PARAM_DUMP_SETTINGS = 0x12;
   const SYSEX_PARAM_DUMP_WAVETABLE = 0x13;
+  const SYSEX_PARAM_DEVICE_MODE = 0x14;
 
   let midi = null;
   let input = null;
@@ -78,7 +79,7 @@
     if (payload[0] !== MFR) return null;
     if (payload.length !== 4) return null;
     const param = payload[1];
-    if (param < SYSEX_PARAM_VELOCITY || param > SYSEX_PARAM_DUMP_WAVETABLE) return null;
+    if (param < SYSEX_PARAM_VELOCITY || param > SYSEX_PARAM_DEVICE_MODE) return null;
     return { param, a: payload[2], b: payload[3] };
   }
 
@@ -255,6 +256,10 @@
     sendParam2(SYSEX_PARAM_CC_MAPPING, clamp(index, 0, 12), clamp(value, 0, 127));
   }
 
+  function sendDeviceMode(mode) {
+    sendParam(SYSEX_PARAM_DEVICE_MODE, clamp(mode, 0, 2));
+  }
+
   function sendStorePreset() {
     sendParam(SYSEX_PARAM_SAVE_SETTINGS, 1);
   }
@@ -315,5 +320,6 @@
     sendCCMap,
     sendStorePreset,
     sendWavetableDump,
+    sendDeviceMode,
   };
 })();

@@ -17,6 +17,7 @@
   const delayMixValEl = document.getElementById("delayMixVal");
   const filterResEl = document.getElementById("filterResonance");
   const filterResValEl = document.getElementById("filterResonanceVal");
+  const deviceModeEl = document.getElementById("deviceMode");
   const ashPanelEl = document.getElementById("ashPanel");
   const settingsSectionEl = document.getElementById("settingsSection");
   const ccFields = document.querySelectorAll(".cc-field");
@@ -185,6 +186,11 @@
         const value = ((valueA & 0x7F) << 7) | (valueB & 0x7F);
         filterResEl.value = value;
         filterResValEl.textContent = value;
+        break;
+      }
+      case 0x14: {
+        const value = ((valueA & 0x7F) << 7) | (valueB & 0x7F);
+        if (deviceModeEl) deviceModeEl.value = String(Math.max(0, Math.min(2, value)));
         break;
       }
       case 0x10: {
@@ -568,6 +574,12 @@
     filterResValEl.textContent = filterResEl.value;
     MidiControl.sendFilterResonance(Number(filterResEl.value));
   };
+
+  if (deviceModeEl) {
+    deviceModeEl.onchange = () => {
+      MidiControl.sendDeviceMode(Number(deviceModeEl.value));
+    };
+  }
 
   storeBtn.onmousedown = () => {
     MidiControl.sendStorePreset();
