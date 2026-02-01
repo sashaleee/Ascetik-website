@@ -125,6 +125,28 @@ input[type="range"]::-moz-range-thumb {
   border: 1px solid #333;
 }
 
+input[type="range"].slim-slider {
+  height: 12px;
+}
+
+input[type="range"].slim-slider::-webkit-slider-runnable-track {
+  height: 12px;
+}
+
+input[type="range"].slim-slider::-webkit-slider-thumb {
+  width: 10px;
+  height: 12px;
+}
+
+input[type="range"].slim-slider::-moz-range-track {
+  height: 12px;
+}
+
+input[type="range"].slim-slider::-moz-range-thumb {
+  width: 10px;
+  height: 12px;
+}
+
 input[type="checkbox"] {
   width: 18px;
   height: 18px;
@@ -190,6 +212,7 @@ input[type="checkbox"]:checked::after {
   align-items: center;
   gap: 8px;
 }
+
 
 select {
   border: 2px solid #fff;

@@ -30,6 +30,7 @@
   const wavetableTargetEl = document.getElementById("wavetableTarget");
   const wavetablePreviewEl = document.getElementById("wavetablePreview");
   const wavetableFilenameEl = document.getElementById("wavetableFilename");
+  const wavetableVolumeEl = document.getElementById("wavetableVolume");
   const presetNameEl = document.getElementById("presetName");
   const logHistory = [];
   let lastLoadedInputId = null;
@@ -37,6 +38,7 @@
   let pendingWavetable = null;
   let wavetableAudioCtx = null;
   let wavetableSource = null;
+  let wavetableGain = null;
 
   function renderMonitorLog() {
     monitorLogEl.innerHTML = logHistory.map(entry => formatLogLine(entry)).join("<br>");
@@ -487,7 +489,18 @@
       wavetableSource.disconnect();
       wavetableSource = null;
     }
+    if (wavetableGain) {
+      wavetableGain.disconnect();
+      wavetableGain = null;
+    }
     if (playWavetableBtn) playWavetableBtn.textContent = "Play";
+  }
+
+  function getWavetableGainValue() {
+    if (!wavetableVolumeEl) return 0.5;
+    const value = Number(wavetableVolumeEl.value);
+    if (!Number.isFinite(value)) return 0.5;
+    return Math.max(0, Math.min(1, value / 127));
   }
 
   function playWavetableLoop() {
@@ -508,9 +521,16 @@
     wavetableSource.buffer = buffer;
     wavetableSource.loop = true;
     wavetableSource.playbackRate.value = targetHz / baseHz;
-    wavetableSource.connect(ctx.destination);
+    wavetableGain = ctx.createGain();
+    wavetableGain.gain.value = getWavetableGainValue();
+    wavetableSource.connect(wavetableGain);
+    wavetableGain.connect(ctx.destination);
     wavetableSource.onended = () => {
       wavetableSource = null;
+      if (wavetableGain) {
+        wavetableGain.disconnect();
+        wavetableGain = null;
+      }
       if (playWavetableBtn) playWavetableBtn.textContent = "Play";
     };
     wavetableSource.start();
@@ -618,6 +638,13 @@
     playWavetableBtn.ontouchstart = (e) => {
       e.preventDefault();
       playWavetableLoop();
+    };
+  }
+  if (wavetableVolumeEl) {
+    wavetableVolumeEl.oninput = () => {
+      if (wavetableGain) {
+        wavetableGain.gain.value = getWavetableGainValue();
+      }
     };
   }
 
