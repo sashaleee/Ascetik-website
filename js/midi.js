@@ -252,6 +252,17 @@
     sendParam(SYSEX_PARAM_FILTER_RESONANCE, clamp(v, 0, 255));
   }
 
+  function sendCC(cc, value, channel) {
+    if (!output) return;
+    const ch = clamp(channel || 1, 1, 16);
+    const msg = new Uint8Array([
+      0xB0 + (ch - 1),
+      clamp(cc, 0, 127),
+      clamp(value, 0, 127),
+    ]);
+    output.send(msg);
+  }
+
   function sendCCMap(index, value) {
     sendParam2(SYSEX_PARAM_CC_MAPPING, clamp(index, 0, 12), clamp(value, 0, 127));
   }
@@ -317,6 +328,7 @@
     sendDelayFeedback,
     sendDelayMix,
     sendFilterResonance,
+    sendCC,
     sendCCMap,
     sendStorePreset,
     sendWavetableDump,

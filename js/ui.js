@@ -40,6 +40,11 @@
   let wavetableSource = null;
   let wavetableGain = null;
 
+  function clamp(value, min, max) {
+    if (!Number.isFinite(value)) return min;
+    return Math.max(min, Math.min(max, value));
+  }
+
   function renderMonitorLog() {
     monitorLogEl.innerHTML = logHistory.map(entry => formatLogLine(entry)).join("<br>");
   }
@@ -239,6 +244,19 @@
     MidiControl.sendCCMap(index, entered);
   }
 
+  function currentChannel() {
+    const value = Number(chanEl.value);
+    if (!Number.isFinite(value)) return 1;
+    return clamp(value, 1, 16);
+  }
+
+  function sendSliderCC(inputEl) {
+    const cc = Number(inputEl.dataset.cc);
+    if (!Number.isInteger(cc)) return;
+    const value = clamp(Number(inputEl.value), 0, 127);
+    MidiControl.sendCC(cc, value, currentChannel());
+  }
+
   function collectPreset() {
     const ccMap = Array.from(ccFields).map(field => {
       const raw = field.value.trim();
@@ -275,19 +293,22 @@
       MidiControl.sendMIDIThru(preset.midiThru);
     }
     if (Number.isInteger(preset.delayFeedback)) {
-      delayEl.value = preset.delayFeedback;
-      delayValEl.textContent = preset.delayFeedback;
-      MidiControl.sendDelayFeedback(preset.delayFeedback);
+      const value = clamp(preset.delayFeedback, 0, 127);
+      delayEl.value = value;
+      delayValEl.textContent = value;
+      sendSliderCC(delayEl);
     }
     if (Number.isInteger(preset.delayMix)) {
-      delayMixEl.value = preset.delayMix;
-      delayMixValEl.textContent = preset.delayMix;
-      MidiControl.sendDelayMix(preset.delayMix);
+      const value = clamp(preset.delayMix, 0, 127);
+      delayMixEl.value = value;
+      delayMixValEl.textContent = value;
+      sendSliderCC(delayMixEl);
     }
     if (Number.isInteger(preset.filterResonance)) {
-      filterResEl.value = preset.filterResonance;
-      filterResValEl.textContent = preset.filterResonance;
-      MidiControl.sendFilterResonance(preset.filterResonance);
+      const value = clamp(preset.filterResonance, 0, 127);
+      filterResEl.value = value;
+      filterResValEl.textContent = value;
+      sendSliderCC(filterResEl);
     }
     if (Array.isArray(preset.ccMap)) {
       preset.ccMap.slice(0, 13).forEach((value, index) => {
@@ -582,17 +603,17 @@
 
   delayEl.oninput = () => {
     delayValEl.textContent = delayEl.value;
-    MidiControl.sendDelayFeedback(Number(delayEl.value));
+    sendSliderCC(delayEl);
   };
 
   delayMixEl.oninput = () => {
     delayMixValEl.textContent = delayMixEl.value;
-    MidiControl.sendDelayMix(Number(delayMixEl.value));
+    sendSliderCC(delayMixEl);
   };
 
   filterResEl.oninput = () => {
     filterResValEl.textContent = filterResEl.value;
-    MidiControl.sendFilterResonance(Number(filterResEl.value));
+    sendSliderCC(filterResEl);
   };
 
   if (deviceModeEl) {
