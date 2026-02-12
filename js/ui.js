@@ -11,10 +11,6 @@
   const chanEl = document.getElementById("midiChannel");
   const chanValEl = document.getElementById("midiChannelVal");
   const thruEl = document.getElementById("midiThru");
-  const delayEl = document.getElementById("delayFeedback");
-  const delayValEl = document.getElementById("delayFeedbackVal");
-  const delayMixEl = document.getElementById("delayMix");
-  const delayMixValEl = document.getElementById("delayMixVal");
   const filterResEl = document.getElementById("filterResonance");
   const filterResValEl = document.getElementById("filterResonanceVal");
   const deviceModeEl = document.getElementById("deviceMode");
@@ -177,18 +173,6 @@
         thruEl.checked = value !== 0;
         break;
       }
-      case 0x0D: {
-        const value = ((valueA & 0x7F) << 7) | (valueB & 0x7F);
-        delayEl.value = value;
-        delayValEl.textContent = value;
-        break;
-      }
-      case 0x0E: {
-        const value = ((valueA & 0x7F) << 7) | (valueB & 0x7F);
-        delayMixEl.value = value;
-        delayMixValEl.textContent = value;
-        break;
-      }
       case 0x0F: {
         const value = ((valueA & 0x7F) << 7) | (valueB & 0x7F);
         filterResEl.value = value;
@@ -212,8 +196,8 @@
         break;
       }
     },
-    onNote: addNoteMessage,
-    onCC: addCCMessage,
+    onNote: () => {},
+    onCC: () => {},
     onStatus: msg => {
       if (msg === "") return;
       if (msg === "WebMIDI not supported" ||
@@ -269,8 +253,6 @@
       velocity: Number(velEl.value),
       midiChannel: Number(chanEl.value),
       midiThru: thruEl.checked,
-      delayFeedback: Number(delayEl.value),
-      delayMix: Number(delayMixEl.value),
       filterResonance: Number(filterResEl.value),
       ccMap,
     };
@@ -291,18 +273,6 @@
     if (typeof preset.midiThru === "boolean") {
       thruEl.checked = preset.midiThru;
       MidiControl.sendMIDIThru(preset.midiThru);
-    }
-    if (Number.isInteger(preset.delayFeedback)) {
-      const value = clamp(preset.delayFeedback, 0, 127);
-      delayEl.value = value;
-      delayValEl.textContent = value;
-      sendSliderCC(delayEl);
-    }
-    if (Number.isInteger(preset.delayMix)) {
-      const value = clamp(preset.delayMix, 0, 127);
-      delayMixEl.value = value;
-      delayMixValEl.textContent = value;
-      sendSliderCC(delayMixEl);
     }
     if (Number.isInteger(preset.filterResonance)) {
       const value = clamp(preset.filterResonance, 0, 127);
@@ -599,16 +569,6 @@
 
   thruEl.onchange = () => {
     MidiControl.sendMIDIThru(thruEl.checked);
-  };
-
-  delayEl.oninput = () => {
-    delayValEl.textContent = delayEl.value;
-    sendSliderCC(delayEl);
-  };
-
-  delayMixEl.oninput = () => {
-    delayMixValEl.textContent = delayMixEl.value;
-    sendSliderCC(delayMixEl);
   };
 
   filterResEl.oninput = () => {
