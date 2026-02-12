@@ -71,10 +71,10 @@
   }
 
   function setUiConnected(connected) {
-    const display = connected ? "" : "none";
-    if (settingsSectionEl) settingsSectionEl.style.display = display;
-    if (deviceSectionEl) deviceSectionEl.style.display = display;
-    if (wavetableSectionEl) wavetableSectionEl.style.display = display;
+    // Keep UI visible even when no device is connected.
+    if (settingsSectionEl) settingsSectionEl.style.display = "";
+    if (deviceSectionEl) deviceSectionEl.style.display = "";
+    if (wavetableSectionEl) wavetableSectionEl.style.display = "";
   }
 
   function addNoteMessage(note, velocity, channel, kind) {
